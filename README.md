@@ -17,7 +17,7 @@ A full-stack authentication system built using the MERN stack with secure OTP-ba
 - Backend: Node.js, Express.js
 - Database: MongoDB
 - Authentication: JWT, OTP
-- Email: Nodemailer
+- Email: Brevo transactional email API
 
 ## Setup Instructions
 
