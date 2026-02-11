@@ -1,11 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import userModel from "../models/userModel.js";
-import transporter from "../config/nodemailer.js";
-import {
-  sendVerifyOtp_template,
-  sendResetPassOtp_template,
-} from "../config/emailTemplate.js";
+import sendEmail from "../utils/sendEmail.js";
 
 export const register = async (req, res) => {
   const { name, email, password } = req.body;
@@ -37,16 +33,14 @@ export const register = async (req, res) => {
     });
 
     //welcome email
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: `Welcome to Auth System`,
-      text: `Hello ${name}. Thank you for registering, your account has been created with with email id: ${email}.`,
-    };
-
     try {
-      await transporter.sendMail(mailOptions);
-      console.log("Email sent to: ", email);
+      await sendEmail({
+        to: user.email,
+        name: user.name,
+        email: user.email,
+        type: "welcome",
+      });
+      console.log("Email sent");
     } catch (error) {
       console.error("Email send failed: ", error);
     }
@@ -132,19 +126,15 @@ export const sendVerifyOtp = async (req, res) => {
 
     await user.save();
 
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: `Account Verification OTP`,
-      // text: `Your OTP is ${otp}. Please use this OTP to verify your account`,
-      html: sendVerifyOtp_template
-        .replace("{{otp}}", otp)
-        .replace("{{email}}", user.email),
-    };
-
+    // account verification email
     try {
-      await transporter.sendMail(mailOptions);
-      console.log("Email sent to: ", email);
+      await sendEmail({
+        to: user.email,
+        otp,
+        email: user.email,
+        type: "verification",
+      });
+      console.log("Email sent");
     } catch (error) {
       console.error("Email send failed: ", error);
     }
@@ -220,19 +210,15 @@ export const sendResetPassOtp = async (req, res) => {
     user.resetOtpExpireAt = Date.now() + 15 * 60 * 1000;
     await user.save();
 
-    const mailOptions = {
-      from: process.env.SENDER_EMAIL,
-      to: user.email,
-      subject: "Password Reset OTP",
-      // text: `Your OTP for resetting your password is ${otp}. It will expire in 15 minutes. Use this OTP to proceed with resetting your password.`,
-      html: sendResetPassOtp_template
-        .replace("{{otp}}", otp)
-        .replace("{{email}}", user.email),
-    };
-
+    // reset password email
     try {
-      await transporter.sendMail(mailOptions);
-      console.log("Email sent to: ", email);
+      await sendEmail({
+        to: user.email,
+        otp,
+        email: user.email,
+        type: "resetPassword",
+      });
+      console.log("Email sent");
     } catch (error) {
       console.error("Email send failed: ", error);
     }
