@@ -46,8 +46,9 @@ export const register = async (req, res) => {
 
     try {
       await transporter.sendMail(mailOptions);
+      console.log("Email sent to: ", email);
     } catch (error) {
-      console.log("Email failed", error.message);
+      console.error("Email send failed: ", error);
     }
 
     return res.json({ success: true });
@@ -141,7 +142,13 @@ export const sendVerifyOtp = async (req, res) => {
         .replace("{{email}}", user.email),
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("Email sent to: ", email);
+    } catch (error) {
+      console.error("Email send failed: ", error);
+    }
+
     res.json({
       success: true,
       message: `Verification OTP sent on email: ${user.email}`,
@@ -222,7 +229,13 @@ export const sendResetPassOtp = async (req, res) => {
         .replace("{{otp}}", otp)
         .replace("{{email}}", user.email),
     };
-    await transporter.sendMail(mailOptions);
+
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log("Email sent to: ", email);
+    } catch (error) {
+      console.error("Email send failed: ", error);
+    }
 
     return res.json({
       success: true,
