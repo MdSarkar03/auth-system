@@ -44,7 +44,11 @@ export const register = async (req, res) => {
       text: `Hello ${name}. Thank you for registering, your account has been created with with email id: ${email}.`,
     };
 
-    await transporter.sendMail(mailOptions);
+    try {
+      await transporter.sendMail(mailOptions);
+    } catch (error) {
+      console.log("Email failed", error.message);
+    }
 
     return res.json({ success: true });
   } catch (error) {

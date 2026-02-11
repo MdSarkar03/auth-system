@@ -45,6 +45,7 @@ const ResetPassword = () => {
       const { data } = await axios.post(
         backendUrl + "/api/auth/send-reset-otp",
         { email },
+        { withCredentials: true },
       );
       data.success ? toast.success(data.message) : toast.error(data.message);
       data.success && setIsEmailSent(true);

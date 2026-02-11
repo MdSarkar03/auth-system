@@ -45,6 +45,7 @@ const EmailVerify = () => {
       const { data } = await axios.post(
         backendUrl + "/api/auth/verify-account",
         { otp },
+        { withCredentials: true },
       );
 
       if (data.success) {
