@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import connectDB from "./config/mongodb.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import { generalLimiter } from "./middlewares/rateLimiter.js";
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -17,6 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors({ origin: allowedOrigins, credentials: true }));
+
+// general rate limiter to all routes
+app.use(generalLimiter);
 
 app.get("/", (req, res) => {
   res.send("API working");

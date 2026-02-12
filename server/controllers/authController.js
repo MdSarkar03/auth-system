@@ -65,7 +65,7 @@ export const login = async (req, res) => {
     if (!user) {
       return res.json({
         success: false,
-        message: "Inavalid email or paasword",
+        message: "Invalid email or paasword",
       });
     }
 
@@ -73,7 +73,7 @@ export const login = async (req, res) => {
     if (!isPassword) {
       return res.json({
         success: false,
-        message: "Inavalid email or paasword",
+        message: "Invalid email or paasword",
       });
     }
 
