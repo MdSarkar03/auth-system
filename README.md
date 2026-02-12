@@ -1,4 +1,4 @@
-# Full-satck Authentication System
+# Full-stack Authentication System
 
 A full-stack authentication system built using the MERN stack with secure OTP-based email verification and password recovery.
 
